@@ -24,5 +24,4 @@ def home():
 @app.route('/contacts/all', methods=['GET'])
 def api_all():
     return jsonify(contacts)
-
-app.run()
+    
