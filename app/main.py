@@ -17,7 +17,18 @@ contacts = [
 @app.route('/', methods=['GET'])
 def home():
     return '''<h1>Contacts API</h1>
-<p>A demo API for storing, updating, and reading persnoal contacts.</p>'''
+<p>A demo API for storing, updating, and reading personal contacts.</p>
+<h2> Lookup functions </h2>
+<p>GET /contacts/all -- return all available contacts </p>
+<p>GET /contacts/getbyID -- return contact by ID. ?id </p>
+<p>GET /contacts/getbyfname -- return contact by first name. ?fname </p>
+<p>GET /contacts/getbylname -- return contact by last name. ?lname </p>
+<p>GET /contacts/getbyflname -- return contact by first and last name. ?fname, ?lname </p>
+<h2> Data functions </h2>
+<p>GET /contacts/add -- adds a new contact. ?id, ?fname, ?lname, ?email, ?phone </p>
+<p> GET /contacts/delete -- deletes a contact. ?id </p>
+<p> GET /contacts/update -- updates a contact. ?id, ?fname, ?lname, ?email, ?phone </p>
+'''
 
 
 # A route to return all of the available contacts
