@@ -13,21 +13,11 @@ contacts = [
      'email': 'hello@scottylabs.org'}
 ]
 
-
+# Home page route
 @app.route('/', methods=['GET'])
 def home():
     return '''<h1>Contacts API</h1>
 <p>A demo API for storing, updating, and reading personal contacts.</p>
-<h2> Lookup functions </h2>
-<p>GET /contacts/all -- return all available contacts </p>
-<p>GET /contacts/getbyID -- return contact by ID. ?id </p>
-<p>GET /contacts/getbyfname -- return contact by first name. ?fname </p>
-<p>GET /contacts/getbylname -- return contact by last name. ?lname </p>
-<p>GET /contacts/getbyflname -- return contact by first and last name. ?fname, ?lname </p>
-<h2> Data functions </h2>
-<p>GET /contacts/add -- adds a new contact. ?id, ?fname, ?lname, ?email, ?phone </p>
-<p> GET /contacts/delete -- deletes a contact. ?id </p>
-<p> GET /contacts/update -- updates a contact. ?id, ?fname, ?lname, ?email, ?phone </p>
 '''
 
 
@@ -36,116 +26,82 @@ def home():
 def api_all():
     return jsonify(contacts)
 
-## LOOKUP ROUTES ##
+## READ ROUTES ##
+
+# Redirect to /contacts/all if no id provided
+@app.route('/contacts/')
+def api_contacts():
+    return api_all()
 
 # A route to return a specific contact by id
-@app.route('/contacts/getbyID', methods=['GET'])
-def api_byID():
-    if 'id' in request.args:
-        id = int(request.args['id'])
+@app.route('/contacts/<int:id>', methods=['GET'])
+def api_byID(id):
     results = []
     for contact in contacts:
         if contact['id'] == id:
             results.append(contact)
 
     return jsonify(results)
-
-# A route to return a specific contact by first name
-@app.route('/contacts/getbyfname', methods=['GET'])
-def api_getbyfname():
-    if 'fname' in request.args:
-        fname = request.args['fname']
-    else:
-         fname = ''
-    results = []
-    for contact in contacts:
-        if contact['fname'] == fname:
-            results.append(contact)
-
-    return jsonify(results)
-
-# A route to return a specific contact by last name
-@app.route('/contacts/getbylname', methods=['GET'])
-def api_getbylname():
-    if 'lname' in request.args:
-        lname = request.args['lname']
-    else:
-        lname = ''
-    results = []
-    for contact in contacts:
-        if contact['lname'] == lname:
-            results.append(contact)
-
-    return jsonify(results)
-
-# A route to return a specific contact by first and last name
-@app.route('/contacts/getbyflname', methods=['GET'])
-def api_getbyflname():
-    if 'lname' in request.args:
-        lname = request.args['lname']
-    else:
-        lname = ''
-    if 'fname' in request.args:
-        fname = request.args['fname']
-    else:
-        fname = ''
-    results = []
-    for contact in contacts:
-        if contact['fname'] == fname and contact['lname'] == lname:
-            results.append(contact)
-
-    return jsonify(results)
-
-## DATA FUNCTIONS ##
 
 # A route to add a contact
-@app.route('/contacts/add', methods=['GET'])
+@app.route('/contacts', methods=['POST'])
 def api_add():
+    
     id = len(contacts)
-    contacts.append({})
-    contacts[id]['id'] = id
-    if 'fname' in request.args:
-        contacts[id]['fname'] = request.args['fname']
-    if 'lname' in request.args:
-        contacts[id]['lname']  = request.args['lname']
-    if 'phone' in request.args:
-        contacts[id]['phone']  = request.args['phone']
-    if 'email' in request.args:
-        contacts[id]['email']  = request.args['email']
-    
-    return jsonify(contacts[id])
-
-# A route to delete a contact by id
-@app.route('/contacts/delete', methods=['GET'])
-def api_delete():
-    if 'id' in request.args:
-        id = int(request.args['id'])
+    print(request.json)
+    if 'fname' in request.json:
+        fname = request.json['fname']
     else:
-        return 'no ID provided -- no contact deleted'
-    results = []
-    for contact in contacts:
-        if contact['id'] == id:
-            results.append(contacts.pop(id))
-
-    return jsonify(results)
-
-# A route to update a contact by id
-@app.route('/contacts/update', methods=['GET'])
-def api_update():
-    if 'id' in request.args:
-        id = int(request.args['id'])
+        fname = ''
+    if 'lname' in request.json:
+        lname = request.json['lname']
     else:
-        return 'no ID provided -- no contact updated'
-    
-    if 'fname' in request.args:
-        contacts[id]['fname'] = request.args['fname']
-    if 'lname' in request.args:
-        contacts[id]['lname']  = request.args['lname']
-    if 'phone' in request.args:
-        contacts[id]['phone']  = request.args['phone']
-    if 'email' in request.args:
-        contacts[id]['email']  = request.args['email']
-    
-    return jsonify(contacts[id])
+        lname = ''
+    if 'email' in request.json:
+        email = request.json['email']
+    else:
+        email = ''
+    if 'phone' in request.json:
+        phone = request.json['phone']
+    else:
+        phone = ''
+    contact = {
+        'id': id,
+        'fname': fname,
+        'lname': lname,
+        'email': email,
+        'phone': phone
+    }
+    contacts.append(contact)
+    return jsonify({'contact': contact}), 201
 
-# A route to 
+# A route to delete a contact
+@app.route('/contacts/<int:id>', methods=['DELETE'])
+def api_delete(id):
+    contact = [contact for contact in contacts if contact['id'] == id]
+    if len(contact) == 0:
+        return jsonify({'error': 'no contacts foudn with given id'}), 404
+    contacts.remove(contact[0])
+    return jsonify({'result': "deleted"})
+
+# A route to update a contact
+@app.route('/contacts/<int:id>', methods=['PUT'])
+def api_update(id):
+    contact = [contact for contact in contacts if contact['id'] == id]
+    if len(contact) == 0:
+        return jsonify({'error': 'no contacts foudn with given id'}), 404
+    
+    if 'fname' in request.json:
+        contact[0]['fname'] = request.json['fname']
+
+    if 'lname' in request.json:
+        contact[0]['lname'] = request.json['lname']
+
+    if 'email' in request.json:
+        contact[0]['email'] = request.json['email']
+
+    if 'phone' in request.json:
+        contact[0]['phone'] = request.json['phone']
+   
+    return jsonify({'contact':contact[0]})
+
