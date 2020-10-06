@@ -105,3 +105,20 @@ def api_update(id):
    
     return jsonify({'contact':contact[0]})
 
+# Lookup function
+@app.route('/contacts/query', methods=['GET'])
+def query():
+    results = contacts.copy()
+    for c in results:
+        if 'fname' in request.args and c['fname'] != request.args['fname']:
+            results.remove(c)
+        if 'lname' in request.args and c['lname'] != request.args['lname']:
+            results.remove(c)
+        if 'phone' in request.args and c['phone'] != request.args['phone']:
+            results.remove(c)
+        if 'email' in request.args and c['email'] != request.args['email']:
+            results.remove(c)
+    
+    return jsonify(results)
+
+
