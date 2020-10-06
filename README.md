@@ -283,6 +283,8 @@ To test `UPDATE` and `DELETE`, use a similar method to how we tested `POST` and 
 
 You now have a working, RESTful API in Flask. But you're not done!
 
+**The code for this step is available [here](https://github.com/pranavaddepalli/wdw-demo/tree/main/step%203).**
+
 ## Going Forward: Independent Task
 
 This API ultimately lets us store, read, and manipulate a "contact book." However, the only way to read data from the contact book is to either look at every contact, or provide an ID for the contact. 
