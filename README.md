@@ -5,7 +5,6 @@ In this lab, you’ll use Flask, a popular Python web framework, to build a REST
 The goal of this lab is to create an API that will allow us to make perform the basic operations of REST -- creating, reading updating, and deleting. This lab is a derivation of [Miguel Grinberg’s Flask RESTFul API Tutorial](https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask), modified specifically for ScottyLabs WDW. The code for this walk-through is hosted on [GitHub](https://github.com/pranavaddepalli/wdw-demo), and if you want to see the API live, check out the [demo](https://github.com/pranavaddepalli/wdw-demo/tree/demo) branch!
 
 ## Diving In
-The code and tutorial for this lab will be [hosted on GitHub](https://github.com/pranavaddepalli/wdw-demo). The code for each step is also given at the end of the step.
 Make sure you go over the  [basic concepts](https://docs.google.com/presentation/d/1PTjdVvNFjh2FI64JupVmVFjXdqBEltiEaRV5EcblGTI/edit?usp=sharing) from the WDW talk: we’ll be using some terms here that you may not be familiar with, and it’s a good idea to brush up on these first. If you'd like, you can also check out the talk's [recording]( ).
 In addition, before these steps, you should download  [Python](https://www.python.org/downloads/), [pip](https://pip.pypa.io/en/stable/installing/), and [Postman](https://www.postman.com/downloads/). Make sure you have an editor as well!
 
@@ -283,6 +282,8 @@ To test `UPDATE` and `DELETE`, use a similar method to how we tested `POST` and 
 
 You now have a working, RESTful API in Flask. But you're not done!
 
+**The code for this step is available [here](https://github.com/pranavaddepalli/wdw-demo/tree/main/step%203).**
+
 ## Going Forward: Independent Task
 
 This API ultimately lets us store, read, and manipulate a "contact book." However, the only way to read data from the contact book is to either look at every contact, or provide an ID for the contact. 
@@ -305,3 +306,4 @@ These topics are a little more complicated, but hopefully this lab has given you
 Most importantly -- I hope you had fun during this lab! It was definitely a great experience for me to put this together for you all, and I hope that this sparked an interest in APIs or software engineering as a whole for at least some of you. Whether you learned something or not, if you had fun working on this project, then that's good enough!
 
 Thanks!
+ 
