@@ -73,3 +73,33 @@ def api_add():
     }
     contacts.append(contact)
     return jsonify({'contact': contact}), 201
+
+# A route to delete a contact
+@app.route('/contacts/<int:id>', methods=['DELETE'])
+def api_delete(id):
+    contact = [contact for contact in contacts if contact['id'] == id]
+    if len(contact) == 0:
+        return jsonify({'error': 'no contacts foudn with given id'}), 404
+    contacts.remove(contact[0])
+    return jsonify({'result': "deleted"})
+
+# A route to update a contact
+@app.route('/contacts/<int:id>', methods=['PUT'])
+def api_update(id):
+    contact = [contact for contact in contacts if contact['id'] == id]
+    if len(contact) == 0:
+        return jsonify({'error': 'no contacts foudn with given id'}), 404
+    
+    if 'fname' in request.json:
+        contact[0]['fname'] = request.json['fname']
+
+    if 'lname' in request.json:
+        contact[0]['lname'] = request.json['lname']
+
+    if 'email' in request.json:
+        contact[0]['email'] = request.json['email']
+
+    if 'phone' in request.json:
+        contact[0]['phone'] = request.json['phone']
+   
+    return jsonify({'contact':contact[0]})
